@@ -1,13 +1,4 @@
-﻿using PluginsAPI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Minecraft_Mac.Forms
@@ -20,7 +11,7 @@ namespace Minecraft_Mac.Forms
         }
 
 
-        PistonDupe pistonDupe = new PistonDupe();
+        private PistonDupe pistonDupe = new PistonDupe();
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {

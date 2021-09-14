@@ -1,14 +1,5 @@
 ﻿using Minecraft_Mac.Forms;
-using PluginsAPI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Minecraft_Mac
@@ -67,33 +58,6 @@ namespace Minecraft_Mac
                 }
             }
         }
-
-        public static Bitmap BitmapFromURL(string url)
-        {
-            Bitmap loadedBitmap = null;
-            try
-            {
-                var request = System.Net.WebRequest.Create(url);
-                var response = request.GetResponse();
-                using (var responseStream = response.GetResponseStream())
-                {
-                    loadedBitmap = new Bitmap(responseStream);
-                }
-            }
-            catch (System.Net.WebException ex)
-            {
-
-            }
-            return loadedBitmap;
-        }
-
-        public static Size GetTextSize(Control control)
-        {
-            Size len = TextRenderer.MeasureText(control.Text, control.Font);
-            return len;
-        }
-
-
 
         private void Form1_Load(object sender, EventArgs e)
         {

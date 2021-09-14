@@ -68,7 +68,6 @@ namespace Minecraft_Mac.Forms
             this.comboBox1.Size = new System.Drawing.Size(307, 21);
             this.comboBox1.TabIndex = 1;
             this.comboBox1.Text = "Macro";
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // All
             // 
@@ -78,7 +77,6 @@ namespace Minecraft_Mac.Forms
             this.Controls.Add(this.groupBox1);
             this.Name = "All";
             this.Text = "All";
-            this.Load += new System.EventHandler(this.All_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
