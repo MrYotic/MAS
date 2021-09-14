@@ -30,12 +30,12 @@ namespace Minecraft_Mac.Forms
         private void InitializeComponent()
         {
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.checkBoxEnableMacro = new System.Windows.Forms.CheckBox();
+            this.comboBoxActivationRMB = new System.Windows.Forms.ComboBox();
+            this.comboBoxActivationLMB = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.textBoxRMBDelay = new System.Windows.Forms.TextBox();
+            this.textBoxLMBDelay = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
@@ -44,9 +44,9 @@ namespace Minecraft_Mac.Forms
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.checkBox2);
-            this.groupBox2.Controls.Add(this.comboBox3);
-            this.groupBox2.Controls.Add(this.comboBox1);
+            this.groupBox2.Controls.Add(this.checkBoxEnableMacro);
+            this.groupBox2.Controls.Add(this.comboBoxActivationRMB);
+            this.groupBox2.Controls.Add(this.comboBoxActivationLMB);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(152, 92);
@@ -55,41 +55,41 @@ namespace Minecraft_Mac.Forms
             this.groupBox2.Text = "Main settings";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
-            // checkBox2
+            // checkBoxEnableMacro
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(6, 70);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(91, 17);
-            this.checkBox2.TabIndex = 8;
-            this.checkBox2.Text = "Enable macro";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.checkBoxEnableMacro.AutoSize = true;
+            this.checkBoxEnableMacro.Location = new System.Drawing.Point(6, 70);
+            this.checkBoxEnableMacro.Name = "checkBoxEnableMacro";
+            this.checkBoxEnableMacro.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxEnableMacro.TabIndex = 8;
+            this.checkBoxEnableMacro.Text = "Enable macro";
+            this.checkBoxEnableMacro.UseVisualStyleBackColor = true;
+            this.checkBoxEnableMacro.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // comboBox3
+            // comboBoxActivationRMB
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(6, 43);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(137, 21);
-            this.comboBox3.TabIndex = 26;
-            this.comboBox3.Text = "Activation key rmb";
-            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            this.comboBoxActivationRMB.FormattingEnabled = true;
+            this.comboBoxActivationRMB.Location = new System.Drawing.Point(6, 43);
+            this.comboBoxActivationRMB.Name = "comboBoxActivationRMB";
+            this.comboBoxActivationRMB.Size = new System.Drawing.Size(137, 21);
+            this.comboBoxActivationRMB.TabIndex = 26;
+            this.comboBoxActivationRMB.Text = "Activation key RMB";
+            this.comboBoxActivationRMB.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
-            // comboBox1
+            // comboBoxActivationLMB
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(6, 16);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(137, 21);
-            this.comboBox1.TabIndex = 9;
-            this.comboBox1.Text = "Activation key lmb";
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBoxActivationLMB.FormattingEnabled = true;
+            this.comboBoxActivationLMB.Location = new System.Drawing.Point(6, 16);
+            this.comboBoxActivationLMB.Name = "comboBoxActivationLMB";
+            this.comboBoxActivationLMB.Size = new System.Drawing.Size(137, 21);
+            this.comboBoxActivationLMB.TabIndex = 9;
+            this.comboBoxActivationLMB.Text = "Activation key LMB";
+            this.comboBoxActivationLMB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox6);
-            this.groupBox1.Controls.Add(this.textBox12);
+            this.groupBox1.Controls.Add(this.textBoxRMBDelay);
+            this.groupBox1.Controls.Add(this.textBoxLMBDelay);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Location = new System.Drawing.Point(12, 110);
@@ -99,23 +99,25 @@ namespace Minecraft_Mac.Forms
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "CPS";
             // 
-            // textBox6
+            // textBoxRMBDelay
             // 
-            this.textBox6.Location = new System.Drawing.Point(39, 49);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(104, 20);
-            this.textBox6.TabIndex = 25;
-            this.textBox6.Text = "500";
-            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            this.textBoxRMBDelay.Location = new System.Drawing.Point(39, 49);
+            this.textBoxRMBDelay.Name = "textBoxRMBDelay";
+            this.textBoxRMBDelay.Size = new System.Drawing.Size(104, 20);
+            this.textBoxRMBDelay.TabIndex = 25;
+            this.textBoxRMBDelay.Text = "500";
+            this.textBoxRMBDelay.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            this.textBoxRMBDelay.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox6_KeyPress);
             // 
-            // textBox12
+            // textBoxLMBDelay
             // 
-            this.textBox12.Location = new System.Drawing.Point(39, 23);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(104, 20);
-            this.textBox12.TabIndex = 43;
-            this.textBox12.Text = "500";
-            this.textBox12.TextChanged += new System.EventHandler(this.textBox12_TextChanged);
+            this.textBoxLMBDelay.Location = new System.Drawing.Point(39, 23);
+            this.textBoxLMBDelay.Name = "textBoxLMBDelay";
+            this.textBoxLMBDelay.Size = new System.Drawing.Size(104, 20);
+            this.textBoxLMBDelay.TabIndex = 43;
+            this.textBoxLMBDelay.Text = "500";
+            this.textBoxLMBDelay.TextChanged += new System.EventHandler(this.textBox12_TextChanged);
+            this.textBoxLMBDelay.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox12_KeyPress);
             // 
             // label13
             // 
@@ -142,9 +144,10 @@ namespace Minecraft_Mac.Forms
             this.ClientSize = new System.Drawing.Size(178, 197);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "AutoClicker";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AutoClicker";
+            this.Text = "Clicker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoClicker_FormClosing);
             this.Load += new System.EventHandler(this.AutoClicker_Load);
             this.groupBox2.ResumeLayout(false);
@@ -158,12 +161,12 @@ namespace Minecraft_Mac.Forms
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox2;
-        public System.Windows.Forms.CheckBox checkBox2;
-        public System.Windows.Forms.ComboBox comboBox3;
-        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.CheckBox checkBoxEnableMacro;
+        public System.Windows.Forms.ComboBox comboBoxActivationRMB;
+        public System.Windows.Forms.ComboBox comboBoxActivationLMB;
         private System.Windows.Forms.GroupBox groupBox1;
-        public System.Windows.Forms.TextBox textBox6;
-        public System.Windows.Forms.TextBox textBox12;
+        public System.Windows.Forms.TextBox textBoxRMBDelay;
+        public System.Windows.Forms.TextBox textBoxLMBDelay;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label7;
     }

@@ -75,6 +75,7 @@ namespace Minecraft_Mac.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(347, 96);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "All";
             this.Text = "All";
             this.groupBox1.ResumeLayout(false);

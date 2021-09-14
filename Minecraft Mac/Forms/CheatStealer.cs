@@ -1,4 +1,6 @@
-﻿using PluginsAPI;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using PluginsAPI;
 using System;
 using System.Drawing;
 using System.IO;
@@ -18,61 +20,90 @@ namespace Minecraft_Mac.Forms
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            chestStealerPlugin.prepare = checkBox1.Checked;
+            chestStealerPlugin.settings.prepare = checkBoxEnablePreInt.Checked;
             SaveCFG();
         }
         static PluginUpdater pluginUpdater = new PluginUpdater();
         private PluginClient pluginClient = new PluginClient(pluginUpdater);
         private void CheatStealer_Load(object sender, EventArgs e)
         {
-
-            comboBox3.Items.Clear();
-            comboBox4.Items.Clear();
-            comboBox2.Items.Clear();
-            comboBox1.Items.Clear();
+            comboBoxActivation9x6.Items.Clear();
+            comboBoxPreIntKey9x6.Items.Clear();
+            comboBoxPreIntKey9x3.Items.Clear();
+            comboBoxActivation9x3.Items.Clear();
             foreach (string name in Enum.GetNames(typeof(Keys)))
             {
-                comboBox4.Items.Add(name);
-                comboBox3.Items.Add(name);
-                comboBox2.Items.Add(name);
-                comboBox1.Items.Add(name);
+                comboBoxPreIntKey9x6.Items.Add(name);
+                comboBoxActivation9x6.Items.Add(name);
+                comboBoxPreIntKey9x3.Items.Add(name);
+                comboBoxActivation9x3.Items.Add(name);
             }
             chestStealerPlugin = new ChestStealerPlugin(this);
-            chestStealerPlugin.LoadCFG();
+            try
+            {
+                chestStealerPlugin.LoadCFG();
+            }
+            catch
+            {
+                chestStealerPlugin.SaveCFG();
+            }
+
+            #region Загрузка значений в форму
+            comboBoxActivation9x3.Text = chestStealerPlugin.settings.chests.chest9x3.binds.enable.ToString();
+            comboBoxActivation9x6.Text = chestStealerPlugin.settings.chests.chest9x6.binds.enable.ToString();
+
+            checkBoxAutoCloseChest.Checked = chestStealerPlugin.settings.auto_close_chest.enabled;
+            checkBoxAutoOpenChest.Checked = chestStealerPlugin.settings.auto_open_chest.enabled;
+
+            textBoxAutoOpenDelay.Text = chestStealerPlugin.settings.auto_open_chest.delay.ToString();
+            textBoxWorkDoneDelay.Text = chestStealerPlugin.settings.work_done_delay.ToString();
+            textBoxShiftDownDelay.Text = chestStealerPlugin.settings.shift.shift_down_delay.ToString();
+            textBoxShiftUpDelay.Text = chestStealerPlugin.settings.shift.shift_up_delay.ToString();
+
+            textBoxMouseDownDelay.Text = chestStealerPlugin.settings.mouse.mouse_down_delay.ToString();
+            textBoxMouseUpDelay.Text = chestStealerPlugin.settings.mouse.mouse_up_delay.ToString();
+
+            textBoxOffset.Text = chestStealerPlugin.settings.chests.offset.ToString();
+
+            comboBoxPreIntKey9x3.Text = chestStealerPlugin.settings.chests.chest9x3.binds.setlocation.ToString();
+            comboBoxPreIntKey9x6.Text = chestStealerPlugin.settings.chests.chest9x6.binds.setlocation.ToString();
+            checkBoxEnablePreInt.Checked = chestStealerPlugin.settings.prepare;
+
+            textBoxCountClicks.Text = chestStealerPlugin.settings.mouse.firstSlot.clicks.ToString();
+            textBoxClicksDelay.Text = chestStealerPlugin.settings.mouse.firstSlot.clicks_delay.ToString();
+            textBoxSlotAimDelay.Text = chestStealerPlugin.settings.mouse.firstSlot.slot_aim_delay.ToString();
+            textBoxSlotSwitchDelay.Text = chestStealerPlugin.settings.mouse.firstSlot.slot_switch_delay.ToString();
+
+            textBox8.Text = chestStealerPlugin.settings.mouse.otherSlots.clicks.ToString();
+            textBox5.Text = chestStealerPlugin.settings.mouse.otherSlots.clicks_delay.ToString();
+            textBox7.Text = chestStealerPlugin.settings.mouse.otherSlots.slot_aim_delay.ToString();
+            textBox6.Text = chestStealerPlugin.settings.mouse.otherSlots.slot_switch_delay.ToString();
+
+            textBox4.Text = chestStealerPlugin.settings.mouse.lastSlot.clicks.ToString();
+            textBox1.Text = chestStealerPlugin.settings.mouse.lastSlot.clicks_delay.ToString();
+            textBox3.Text = chestStealerPlugin.settings.mouse.lastSlot.slot_aim_delay.ToString();
+            textBox2.Text = chestStealerPlugin.settings.mouse.lastSlot.slot_switch_delay.ToString();
+            #endregion
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             Keys key = Keys.None;
-            Enum.TryParse(comboBox2.Text, out key);
+            Enum.TryParse(comboBoxPreIntKey9x3.Text, out key);
             Keys key2 = Keys.None;
-            Enum.TryParse(comboBox1.Text, out key2);
+            Enum.TryParse(comboBoxActivation9x3.Text, out key2);
             Keys key3 = Keys.None;
-            Enum.TryParse(comboBox3.Text, out key3);
+            Enum.TryParse(comboBoxActivation9x6.Text, out key3);
             Keys key4 = Keys.None;
-            Enum.TryParse(comboBox4.Text, out key4);
-            if (checkBox2.Checked)
+            Enum.TryParse(comboBoxPreIntKey9x6.Text, out key4);
+            if (checkBoxEnableMacro.Checked)
             {
-                chestStealerPlugin.prep_key_9x3 = key;
-                chestStealerPlugin.activ_key_9x3 = key2;
-
-                chestStealerPlugin.prep_key_9x6 = key4;
-                chestStealerPlugin.activ_key_9x6 = key3;
-
                 chestStealerPlugin.SaveCFG();
 
                 pluginClient.PluginLoad(chestStealerPlugin);
             }
             else
             {
-                chestStealerPlugin.prep_key_9x3 = key;
-                chestStealerPlugin.activ_key_9x3 = key2;
-
-                chestStealerPlugin.prep_key_9x6 = key4;
-                chestStealerPlugin.activ_key_9x6 = key3;
-
-                chestStealerPlugin.SaveCFG();
-
                 pluginClient.PluginUnLoad(chestStealerPlugin);
             }
         }
@@ -80,132 +111,124 @@ namespace Minecraft_Mac.Forms
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Keys key2 = Keys.None;
-            Enum.TryParse(comboBox1.Text, out key2);
-            chestStealerPlugin.activ_key_9x3 = key2;
+            Enum.TryParse(comboBoxActivation9x3.Text, out key2);
+            chestStealerPlugin.settings.chests.chest9x3.binds.enable = key2;
             SaveCFG();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             int slot_switch_delay = 2;
-            int.TryParse(textBox1.Text, out slot_switch_delay);
-            chestStealerPlugin.slot_switch_delay = slot_switch_delay;
+            int.TryParse(textBoxSlotSwitchDelay.Text, out slot_switch_delay);
+            chestStealerPlugin.settings.mouse.firstSlot.slot_switch_delay = slot_switch_delay;
             SaveCFG();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             int slot_aim_delay = 5;
-            int.TryParse(textBox2.Text, out slot_aim_delay);
-            chestStealerPlugin.slot_aim_delay = slot_aim_delay;
+            int.TryParse(textBoxSlotAimDelay.Text, out slot_aim_delay);
+            chestStealerPlugin.settings.mouse.firstSlot.slot_aim_delay = slot_aim_delay;
             SaveCFG();
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             int clicks = 2;
-            int.TryParse(textBox3.Text, out clicks);
-            chestStealerPlugin.clicks = clicks;
+            int.TryParse(textBoxCountClicks.Text, out clicks);
+            chestStealerPlugin.settings.mouse.firstSlot.clicks = clicks;
             SaveCFG();
         }
 
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
-            int offset_x = 35;
-            int.TryParse(textBox5.Text, out offset_x);
-            chestStealerPlugin.offset_x = offset_x;
-            SaveCFG();
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-            int offset_y = 35;
-            int.TryParse(textBox4.Text, out offset_y);
-            chestStealerPlugin.offset_y = offset_y;
+            int offset = 35;
+            int.TryParse(textBoxOffset.Text, out offset);
+            chestStealerPlugin.settings.chests.offset = offset;
             SaveCFG();
         }
 
         private void textBox6_TextChanged(object sender, EventArgs e)
         {
             int work_done_delay = 500;
-            int.TryParse(textBox6.Text, out work_done_delay);
-            chestStealerPlugin.work_done_delay = work_done_delay;
+            int.TryParse(textBoxWorkDoneDelay.Text, out work_done_delay);
+            chestStealerPlugin.settings.work_done_delay = work_done_delay;
             SaveCFG();
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             Keys key3 = Keys.None;
-            Enum.TryParse(comboBox3.Text, out key3);
-            chestStealerPlugin.activ_key_9x6 = key3;
+            Enum.TryParse(comboBoxActivation9x6.Text, out key3);
+            chestStealerPlugin.settings.chests.chest9x6.binds.enable = key3;
             SaveCFG();
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             Keys key = Keys.None;
-            Enum.TryParse(comboBox2.Text, out key);
-            chestStealerPlugin.prep_key_9x3 = key;
+            Enum.TryParse(comboBoxPreIntKey9x3.Text, out key);
+            chestStealerPlugin.settings.chests.chest9x3.binds.setlocation = key;
             SaveCFG();
         }
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             Keys key4 = Keys.None;
-            Enum.TryParse(comboBox4.Text, out key4);
-            chestStealerPlugin.prep_key_9x6 = key4;
+            Enum.TryParse(comboBoxPreIntKey9x6.Text, out key4);
+            chestStealerPlugin.settings.chests.chest9x6.binds.setlocation = key4;
             SaveCFG();
         }
 
         private void textBox8_TextChanged(object sender, EventArgs e)
         {
             int shift_down_delay = 25;
-            int.TryParse(textBox8.Text, out shift_down_delay);
-            chestStealerPlugin.shift_down_delay = shift_down_delay;
+            int.TryParse(textBoxShiftDownDelay.Text, out shift_down_delay);
+            chestStealerPlugin.settings.shift.shift_down_delay = shift_down_delay;
             SaveCFG();
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
         {
             int shift_up_delay = 25;
-            int.TryParse(textBox7.Text, out shift_up_delay);
-            chestStealerPlugin.shift_up_delay = shift_up_delay;
+            int.TryParse(textBoxShiftUpDelay.Text, out shift_up_delay);
+            chestStealerPlugin.settings.shift.shift_up_delay = shift_up_delay;
             SaveCFG();
         }
 
         private void textBox10_TextChanged(object sender, EventArgs e)
         {
             int mouse_down_delay = 0;
-            int.TryParse(textBox10.Text, out mouse_down_delay);
-            chestStealerPlugin.mouse_down_delay = mouse_down_delay;
+            int.TryParse(textBoxMouseDownDelay.Text, out mouse_down_delay);
+            chestStealerPlugin.settings.mouse.mouse_down_delay = mouse_down_delay;
             SaveCFG();
         }
 
         private void textBox9_TextChanged(object sender, EventArgs e)
         {
             int mouse_up_delay = 3;
-            int.TryParse(textBox9.Text, out mouse_up_delay);
-            chestStealerPlugin.mouse_up_delay = mouse_up_delay;
+            int.TryParse(textBoxMouseUpDelay.Text, out mouse_up_delay);
+            chestStealerPlugin.settings.mouse.mouse_up_delay = mouse_up_delay;
             SaveCFG();
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
-            chestStealerPlugin.auto_close = checkBox4.Checked;
+            chestStealerPlugin.settings.auto_close_chest.enabled = checkBoxAutoCloseChest.Checked;
             SaveCFG();
         }
 
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
-            chestStealerPlugin.auto_open = checkBox5.Checked;
+            chestStealerPlugin.settings.auto_open_chest.enabled = checkBoxAutoOpenChest.Checked;
             SaveCFG();
         }
 
         private void textBox12_TextChanged(object sender, EventArgs e)
         {
             int auto_open_delay = 500;
-            int.TryParse(textBox12.Text, out auto_open_delay);
-            chestStealerPlugin.auto_open_delay = auto_open_delay;
+            int.TryParse(textBoxAutoOpenDelay.Text, out auto_open_delay);
+            chestStealerPlugin.settings.auto_open_chest.delay = auto_open_delay;
             SaveCFG();
         }
 
@@ -218,267 +241,291 @@ namespace Minecraft_Mac.Forms
         private void textBox13_TextChanged(object sender, EventArgs e)
         {
             int click_delay = 2;
-            int.TryParse(textBox12.Text, out click_delay);
-            chestStealerPlugin.clicks_delay = click_delay;
+            int.TryParse(textBoxClicksDelay.Text, out click_delay);
+            chestStealerPlugin.settings.mouse.firstSlot.clicks_delay = click_delay;
             SaveCFG();
         }
 
         #region Дополнительные методы
         private void SaveCFG()
         {
-            Task.Factory.StartNew(() =>
-            {
-                chestStealerPlugin.SaveCFG();
-            });
+            chestStealerPlugin.SaveCFG();
         }
         #endregion
+
+        private void textBox12_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox8_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox7_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox10_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox9_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox13_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox8_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox8.Text, out temp);
+            chestStealerPlugin.settings.mouse.otherSlots.clicks = temp;
+            SaveCFG();
+        }
+
+        private void textBox5_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox5.Text, out temp);
+            chestStealerPlugin.settings.mouse.otherSlots.clicks_delay = temp;
+            SaveCFG();
+        }
+
+        private void textBox7_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox7.Text, out temp);
+            chestStealerPlugin.settings.mouse.otherSlots.slot_switch_delay = temp;
+            SaveCFG();
+        }
+
+        private void textBox6_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox6.Text, out temp);
+            chestStealerPlugin.settings.mouse.otherSlots.slot_aim_delay = temp;
+            SaveCFG();
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox4.Text, out temp);
+            chestStealerPlugin.settings.mouse.lastSlot.clicks = temp;
+            SaveCFG();
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox1.Text, out temp);
+            chestStealerPlugin.settings.mouse.lastSlot.clicks_delay = temp;
+            SaveCFG();
+        }
+
+        private void textBox3_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox3.Text, out temp);
+            chestStealerPlugin.settings.mouse.lastSlot.slot_switch_delay = temp;
+            SaveCFG();
+        }
+
+        private void textBox2_TextChanged_1(object sender, EventArgs e)
+        {
+            int temp = 2;
+            int.TryParse(textBox2.Text, out temp);
+            chestStealerPlugin.settings.mouse.lastSlot.slot_aim_delay = temp;
+            SaveCFG();
+        }
     }
     public class ChestStealerPlugin : Plugin
     {
         private CheatStealer stealer;
+        public ChestStealerSettings settings = new ChestStealerSettings();
         public ChestStealerPlugin(CheatStealer stealer)
         {
             this.stealer = stealer;
-            LoadCFG();
         }
-        #region Бинды актаваций
-        public Keys activ_key_9x3 = Keys.None; /* Клавиша активаций Одиночного сундука */
-        public Keys activ_key_9x6 = Keys.None;  /* Клавиша активаций Двойного сундука */
-        #endregion
-
-        #region Бинды настройки начального слота
-        public Keys prep_key_9x3 = Keys.None;
-        public Keys prep_key_9x6 = Keys.None;
-        #endregion
-
-        #region Настройки мыши
-        public int mouse_down_delay = 0;
-        public int mouse_up_delay = 3;
-        public int clicks = 2;
-        #endregion
-
-        #region Настройки шифта
-        public int shift_down_delay = 25;
-        public int shift_up_delay = 25;
-        #endregion
-
-        #region Настройки скорости
-        public int slot_switch_delay = 2;
-        public int slot_aim_delay = 5;
-        public int clicks_delay = 2;
-        public int work_done_delay = 500;
-        #endregion
-
-        #region Настройка включения настройки начального слота
-        public bool prepare = false;
-        #endregion
-
-        #region Автоматизация
-        public bool auto_close = false;
-        public bool auto_open = false;
-        public int auto_open_delay = 500;
-        #endregion
-
-        #region Настройка офсета для смещения от начального слота
-        public int offset_x = 35;
-        public int offset_y = 35;
-        #endregion
 
         #region Работа с конфигурацией
         public void LoadCFG()
         {
-            if (File.Exists("Chest Stealer.ini"))
+            if (File.Exists("Settings\\Chest Stealer.json"))
             {
-                INIManager manager = new INIManager(Path.Combine(Application.StartupPath, "Chest Stealer.ini"));
-                /* *Main settings */
-                try 
-                { 
-                    slot_switch_delay = int.Parse(manager.GetPrivateString("Main settings", "Slot Switch Delay"));
-                    stealer.textBox1.Text = slot_switch_delay.ToString();
-                } catch { }
-                try 
-                { 
-                    mouse_down_delay = int.Parse(manager.GetPrivateString("Main settings", "Mouse Down Delay"));
-                } catch { }
-                try 
-                { 
-                    mouse_up_delay = int.Parse(manager.GetPrivateString("Main settings", "Mouse Up Delay"));
-                } catch { }
-                try 
-                { 
-                    shift_down_delay = int.Parse(manager.GetPrivateString("Main settings", "Shift Down Delay"));
-                    stealer.textBox8.Text = shift_down_delay.ToString();
-                } catch { }
-                try 
-                { 
-                    shift_up_delay = int.Parse(manager.GetPrivateString("Main settings", "Shift Up Delay"));
-                    stealer.textBox7.Text = shift_up_delay.ToString();
-                } catch { }
-                try 
-                { 
-                    slot_aim_delay = int.Parse(manager.GetPrivateString("Main settings", "Slot Aim Delay"));
-                    stealer.textBox2.Text = slot_aim_delay.ToString();
-                } catch { }
-                try 
-                { 
-                    work_done_delay = int.Parse(manager.GetPrivateString("Main settings", "End Delay")); 
-                } catch { }
-                try 
-                { 
-                    clicks = int.Parse(manager.GetPrivateString("Main settings", "Slot CPS"));
-                    stealer.textBox3.Text = clicks.ToString();
-                } catch { }
-                try 
-                { 
-                    prepare = bool.Parse(manager.GetPrivateString("Main settings", "Location Manager"));
-                    stealer.checkBox1.Checked = prepare;
-                } catch { }
-                try
+
+                using (StreamReader sr = new StreamReader("Settings\\Chest Stealer.json", encoding: System.Text.Encoding.UTF8))
                 {
-                    auto_close = bool.Parse(manager.GetPrivateString("Main settings", "Auto Close Chest"));
-                    stealer.checkBox4.Checked = auto_close;
+                    string line = sr.ReadToEnd();
+                    settings = JsonConvert.DeserializeObject<ChestStealerSettings>(line);
                 }
-                catch { }
-
-                try
-                {
-                    auto_open = bool.Parse(manager.GetPrivateString("Main settings", "Auto Open Chest"));
-                    stealer.checkBox5.Checked = auto_open;
-                }
-                catch { }
-                try
-                {
-                    auto_open_delay = int.Parse(manager.GetPrivateString("Main settings", "Auto Open Chest Delay"));
-                    stealer.textBox12.Text = auto_open_delay.ToString();
-                }
-                catch { }
-                try
-                {
-                    clicks_delay = int.Parse(manager.GetPrivateString("Main settings", "Clicks Delay"));
-                    stealer.textBox13.Text = clicks_delay.ToString();
-                }
-                catch { }
-
-                try
-                {
-                    Point point = new Point(int.Parse(manager.GetPrivateString("Main settings", "Offset X")), int.Parse(manager.GetPrivateString("Main settings", "Offset Y")));
-                    offset_x = point.X;
-                    offset_y = point.Y;
-
-                    stealer.textBox5.Text = offset_x.ToString();
-                    stealer.textBox4.Text = offset_y.ToString();
-                } catch { }
-
-                /* Small chest */
-                try 
-                { 
-                    prep_key_9x3 = (Keys)Enum.Parse(typeof(Keys), manager.GetPrivateString("9x3", "New Postion Activation Key"));
-                    stealer.comboBox2.Text = prep_key_9x3.ToString();
-                } catch { }
-                try 
-                { 
-                    activ_key_9x3 = (Keys)Enum.Parse(typeof(Keys), manager.GetPrivateString("9x3", "Activation Key"));
-                    stealer.comboBox1.Text = activ_key_9x3.ToString();
-                } catch { }
-                try
-                {
-                    Point point = new Point(int.Parse(manager.GetPrivateString("9x3", "First Slot X")), int.Parse(manager.GetPrivateString("9x3", "First Slot Y")));
-                    first_slot_1_9x3 = point;
-                } catch { }
-
-                /* Large chest */
-                try 
-                { 
-                    prep_key_9x6 = (Keys)Enum.Parse(typeof(Keys), manager.GetPrivateString("9x6", "New Postion Activation Key"));
-                    stealer.comboBox4.Text = prep_key_9x6.ToString();
-                } catch { }
-                try 
-                { 
-                    activ_key_9x6 = (Keys)Enum.Parse(typeof(Keys), manager.GetPrivateString("9x6", "Activation Key"));
-                    stealer.comboBox3.Text = activ_key_9x6.ToString();
-                } catch { }
-                try
-                {
-                    Point point2 = new Point(int.Parse(manager.GetPrivateString("9x6", "First Slot X")), int.Parse(manager.GetPrivateString("9x6", "First Slot Y")));
-                    first_slot_1_9x6 = point2;
-                } catch { }
             }
         }
         public void SaveCFG()
         {
-            if (!File.Exists("Chest Stealer.ini"))
+            if (!Directory.Exists("Settings"))
             {
-                File.Create("Chest Stealer.ini").Close();
+                Directory.CreateDirectory("Settings");
+            }
+            if (!File.Exists("Settings\\Chest Stealer.json"))
+            {
+                File.Create("Settings\\Chest Stealer.json").Close();
             }
 
-            INIManager manager = new INIManager(Path.Combine(Application.StartupPath, "Chest Stealer.ini"));
-            /* *Main settings */
-            manager.WritePrivateString("Main settings", "Slot Switch Delay", slot_switch_delay.ToString());
-            manager.WritePrivateString("Main settings", "Mouse Down Delay", mouse_down_delay.ToString());
-            manager.WritePrivateString("Main settings", "Mouse Up Delay", mouse_up_delay.ToString());
-            manager.WritePrivateString("Main settings", "Shift Down Delay", shift_down_delay.ToString());
-            manager.WritePrivateString("Main settings", "Shift Up Delay", shift_up_delay.ToString());
-            manager.WritePrivateString("Main settings", "Slot Aim Delay", slot_aim_delay.ToString());
-            manager.WritePrivateString("Main settings", "End Delay", work_done_delay.ToString());
-            manager.WritePrivateString("Main settings", "Slot CPS", clicks.ToString());
-            manager.WritePrivateString("Main settings", "Location Manager", prepare.ToString());
-            manager.WritePrivateString("Main settings", "Clicks Delay", clicks_delay.ToString());
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new JavaScriptDateTimeConverter());
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.Formatting = Formatting.Indented;
 
-            manager.WritePrivateString("Main settings", "Auto Close Chest", auto_close.ToString());
-            manager.WritePrivateString("Main settings", "Auto Open Chest", auto_open.ToString());
-            manager.WritePrivateString("Main settings", "Auto Open Chest Delay", auto_open_delay.ToString());
-
-            manager.WritePrivateString("Main settings", "Offset X", offset_x.ToString());
-            manager.WritePrivateString("Main settings", "Offset Y", offset_y.ToString());
-
-            /* Small chest */
-            manager.WritePrivateString("9x3", "New Postion Activation Key", prep_key_9x3.ToString());
-            manager.WritePrivateString("9x3", "Activation Key", activ_key_9x3.ToString());
-            manager.WritePrivateString("9x3", "First Slot X", first_slot_1_9x3.X.ToString());
-            manager.WritePrivateString("9x3", "First Slot Y", first_slot_1_9x3.Y.ToString());
-
-            /* Large chest */
-            manager.WritePrivateString("9x6", "New Postion Activation Key", prep_key_9x6.ToString());
-            manager.WritePrivateString("9x6", "Activation Key", activ_key_9x6.ToString());
-            manager.WritePrivateString("9x6", "First Slot X", first_slot_1_9x6.X.ToString());
-            manager.WritePrivateString("9x6", "First Slot Y", first_slot_1_9x6.Y.ToString());
-
+            using (StreamWriter sw = new StreamWriter("Settings\\Chest Stealer.json"))
+            {
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    serializer.Serialize(writer, settings);
+                }
+            }
         }
         #endregion
 
         #region Логика макроса
-        private void CollectSlot(Point location)
+        private void CollectOtherSlot(Point location)
         {
             Cursor.Position = location;
-            Thread.Sleep(slot_aim_delay);
-            for (int i = 0; i < clicks; i++)
+            Thread.Sleep(settings.mouse.otherSlots.slot_aim_delay);
+            for (int i = 0; i < settings.mouse.otherSlots.clicks; i++)
             {
-                Thread.Sleep(clicks_delay);
+                Thread.Sleep(settings.mouse.otherSlots.clicks_delay);
                 LeftClick();
             }
-            Thread.Sleep(slot_switch_delay);
+            Thread.Sleep(settings.mouse.otherSlots.slot_switch_delay);
         }
-        private Point first_slot_1_9x3;
-        private Point first_slot_1_9x6;
-
+        private void CollectFirstSlot(Point location)
+        {
+            Cursor.Position = location;
+            Thread.Sleep(settings.mouse.firstSlot.slot_aim_delay);
+            for (int i = 0; i < settings.mouse.firstSlot.clicks; i++)
+            {
+                Thread.Sleep(settings.mouse.firstSlot.clicks_delay);
+                LeftClick();
+            }
+            Thread.Sleep(settings.mouse.firstSlot.slot_switch_delay);
+        }
+        private void CollectLastSlot(Point location)
+        {
+            Cursor.Position = location;
+            Thread.Sleep(settings.mouse.lastSlot.slot_aim_delay);
+            for (int i = 0; i < settings.mouse.lastSlot.clicks; i++)
+            {
+                Thread.Sleep(settings.mouse.lastSlot.clicks_delay);
+                LeftClick();
+            }
+            Thread.Sleep(settings.mouse.lastSlot.slot_switch_delay);
+        }
         public void CollectChest(bool chest_doouble, Keys key)
         {
             int rows = 3;
-            switch (chest_doouble)
+            if (chest_doouble)
             {
-                case (true):
-                    rows = 6;
-                    break;
+                rows = 6;
             }
-            switch (auto_open)
+            if (settings.auto_open_chest.enabled)
             {
-                case (true):
-                    RightClick();
-                    Thread.Sleep(auto_open_delay);
-                    break;
+                RightClick();
+                Thread.Sleep(settings.auto_open_chest.delay);
             }
             KeyDown(Keys.ShiftKey);
-            Thread.Sleep(shift_down_delay);
+            Thread.Sleep(settings.shift.shift_down_delay);
             for (int i2 = 0; i2 < rows; i2++)
             {
                 if (IsKeyPressed(key))
@@ -489,21 +536,43 @@ namespace Minecraft_Mac.Forms
                         if (IsKeyPressed(key))
                         {
                             KeyDown(Keys.ShiftKey);
-                            switch (chest_doouble)
+                            if (chest_doouble)
                             {
-                                case (true):
-                                    Point slot_6x9 = new Point(first_slot_1_9x6.X + (i * offset_x), first_slot_1_9x6.Y + (offset_y * i2));
-                                    CollectSlot(slot_6x9);
-                                    break;
-                                default:
-                                    Point slot_3x9 = new Point(first_slot_1_9x3.X + (i * offset_x), first_slot_1_9x3.Y + (offset_y * i2));
-                                    CollectSlot(slot_3x9);
-                                    break;
+
+                                Point slot_6x9 = new Point(settings.chests.chest9x6.first_slot.X + (i * settings.chests.offset), settings.chests.chest9x6.first_slot.Y + (settings.chests.offset * i2));
+                                if (i2 == 0 && i == 0)
+                                {
+                                    CollectFirstSlot(slot_6x9);
+                                }
+                                else if (i2 == 5 && i == 8)
+                                {
+                                    CollectLastSlot(slot_6x9);
+                                }
+                                else
+                                {
+                                    CollectOtherSlot(slot_6x9);
+                                }
+                            }
+                            else
+                            {
+                                Point slot_3x9 = new Point(settings.chests.chest9x3.first_slot.X + (i * settings.chests.offset), settings.chests.chest9x3.first_slot.Y + (settings.chests.offset * i2));
+                                if (i2 == 0 && i == 0)
+                                {
+                                    CollectFirstSlot(slot_3x9);
+                                }
+                                else if (i2 == 2 && i == 8)
+                                {
+                                    CollectLastSlot(slot_3x9);
+                                }
+                                else
+                                {
+                                    CollectOtherSlot(slot_3x9);
+                                }
                             }
                         }
                         else
                         {
-                            Thread.Sleep(shift_up_delay);
+                            Thread.Sleep(settings.shift.shift_up_delay);
                             KeyUp(Keys.ShiftKey);
                             break;
                         }
@@ -512,48 +581,183 @@ namespace Minecraft_Mac.Forms
                 }
                 else
                 {
-                    Thread.Sleep(shift_up_delay);
+                    Thread.Sleep(settings.shift.shift_up_delay);
                     KeyUp(Keys.ShiftKey);
                     break;
                 }
             }
-            Thread.Sleep(shift_up_delay);
+            Thread.Sleep(settings.shift.shift_up_delay);
             KeyUp(Keys.ShiftKey);
             KeyUp(Keys.ControlKey);
-            switch (auto_close)
+            switch (settings.auto_close_chest.enabled)
             {
                 case (true):
                     KeyDown(Keys.Escape);
                     KeyUp(Keys.Escape);
                     break;
             }
-            Thread.Sleep(work_done_delay);
+            Thread.Sleep(settings.work_done_delay);
         }
         #endregion
 
         #region Проверка нажатия клавиш
         public override void Update()
         {
-            if (IsKeyPressed(prep_key_9x3) && prepare)
+            if (IsKeyPressed(settings.chests.chest9x3.binds.setlocation) && settings.prepare)
             {
-                first_slot_1_9x3 = Cursor.Position;
+                settings.chests.chest9x3.first_slot = Cursor.Position;
                 SaveCFG();
                 MessageBox.Show("Позиция первого слота сундука 9x3 сохранена", "Preloadning");
             }
-            else if (IsKeyPressed(prep_key_9x6) && prepare)
+            else if (IsKeyPressed(settings.chests.chest9x6.binds.setlocation) && settings.prepare)
             {
-                first_slot_1_9x6 = Cursor.Position;
+                settings.chests.chest9x6.first_slot = Cursor.Position;
                 SaveCFG();
                 MessageBox.Show("Позиция первого слота сундука 9x6 сохранена", "Preloadning");
             }
-            else if (IsKeyPressed(activ_key_9x3))
+            else if (IsKeyPressed(settings.chests.chest9x3.binds.enable))
             {
-                CollectChest(false, activ_key_9x3);
+                CollectChest(false, settings.chests.chest9x3.binds.enable);
             }
-            else if (IsKeyPressed(activ_key_9x6))
+            else if(IsKeyPressed(settings.chests.chest9x6.binds.enable))
             {
-                CollectChest(true, activ_key_9x6);
+                CollectChest(true, settings.chests.chest9x6.binds.enable);
             }
+        }
+        #endregion
+    }
+
+    public class ChestStealerSettings
+    {
+        #region Настройки скорости
+        [JsonProperty("Work done delay")]
+        public int work_done_delay = 500;
+        [JsonProperty("Set location tool")]
+        public bool prepare = false;
+        #endregion
+        [JsonProperty("Shift")]
+        public Shift shift = new Shift();
+        public class Shift
+        {
+            [JsonProperty("Down delay")]
+            public int shift_down_delay = 25;
+            [JsonProperty("Up delay")]
+            public int shift_up_delay = 25;
+        }
+        [JsonProperty("Mouse")]
+        public Mouse mouse = new Mouse();
+        public class Mouse
+        {
+            [JsonProperty("Down delay")]
+            public int mouse_down_delay = 0;
+            [JsonProperty("Up delay")]
+            public int mouse_up_delay = 0;
+
+            [JsonProperty("First slot")]
+            public FirstSlot firstSlot = new FirstSlot();
+            [JsonProperty("Last slot")]
+            public LastSlot lastSlot = new LastSlot();
+            [JsonProperty("Other slot's")]
+            public OtherSlots otherSlots = new OtherSlots();
+            public class FirstSlot
+            {
+                [JsonProperty("Switch delay")]
+                public int slot_switch_delay = 2;
+                [JsonProperty("Aim delay")]
+                public int slot_aim_delay = 5;
+                [JsonProperty("Clicks delay")]
+                public int clicks_delay = 2;
+                [JsonProperty("Clicks count")]
+                public int clicks = 2;
+            }
+            public class LastSlot
+            {
+                [JsonProperty("Switch delay")]
+                public int slot_switch_delay = 2;
+                [JsonProperty("Aim delay")]
+                public int slot_aim_delay = 5;
+                [JsonProperty("Clicks delay")]
+                public int clicks_delay = 2;
+                [JsonProperty("Clicks count")]
+                public int clicks = 2;
+            }
+            public class OtherSlots
+            {
+                [JsonProperty("Switch delay")]
+                public int slot_switch_delay = 2;
+                [JsonProperty("Aim delay")]
+                public int slot_aim_delay = 5;
+                [JsonProperty("Clicks delay")]
+                public int clicks_delay = 2;
+                [JsonProperty("Clicks count")]
+                public int clicks = 2;
+            }
+        }
+        #region Настройка включения настройки начального слота
+        #endregion
+        [JsonProperty("Chests")]
+        public Chests chests = new Chests();
+
+        public class Chests
+        {
+            [JsonProperty("Offset")]
+            public int offset = 35;
+            [JsonProperty("Chest 9x3")]
+            public Chest9x3 chest9x3 = new Chest9x3();
+            [JsonProperty("Chest 9x6")]
+            public Chest9x6 chest9x6 = new Chest9x6();
+
+
+            public class Chest9x3
+            {
+                [JsonProperty("Fist slot location")]
+                public Point first_slot = new Point(0, 0);
+                [JsonProperty("Binds")]
+                public Binds binds = new Binds();
+                public class Binds
+                {
+                    [JsonProperty("Enable")]
+                    [JsonConverter(typeof(StringEnumConverter))]
+                    public Keys enable = Keys.None;
+                    [JsonProperty("Set fist slot location")]
+                    [JsonConverter(typeof(StringEnumConverter))]
+                    public Keys setlocation = Keys.None;
+                }
+            }
+            public class Chest9x6
+            {
+                [JsonProperty("Fist slot location")]
+                public Point first_slot = new Point(0, 0);
+                [JsonProperty("Binds")]
+                public Binds binds = new Binds();
+                public class Binds
+                {
+                    [JsonProperty("Enable")]
+                    [JsonConverter(typeof(StringEnumConverter))]
+                    public Keys enable = Keys.None;
+                    [JsonProperty("Set fist slot location")]
+                    [JsonConverter(typeof(StringEnumConverter))]
+                    public Keys setlocation = Keys.None;
+                }
+            }
+        }
+
+        #region Автоматизация
+        [JsonProperty("Auto close chest")]
+        public AutoCloseChest auto_close_chest = new AutoCloseChest();
+        [JsonProperty("Auto open chest")]
+        public AutoOpenChest auto_open_chest = new AutoOpenChest();
+        public class AutoCloseChest
+        {
+            [JsonProperty("Enabled")]
+            public bool enabled = false;
+        }
+        public class AutoOpenChest
+        {
+            [JsonProperty("Enabled")]
+            public bool enabled = false;
+            [JsonProperty("Delay")]
+            public int delay = 500;
         }
         #endregion
     }

@@ -1,4 +1,6 @@
-﻿using PluginsAPI;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using PluginsAPI;
 using System;
 using System.IO;
 using System.Threading;
@@ -17,21 +19,21 @@ namespace Minecraft_Mac.Forms
         private void textBox12_TextChanged(object sender, EventArgs e)
         {
             int cps = 12;
-            int.TryParse(textBox12.Text, out cps);
-            clickerMac.lmb_cps = cps;
+            int.TryParse(textBoxLMBDelay.Text, out cps);
+            clickerMac.settings.lmb.cps = cps;
             clickerMac.SaveCFG();
         }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             Keys key2 = Keys.None;
-            Enum.TryParse(comboBox3.Text, out key2);
-            clickerMac.rmb_key = key2;
+            Enum.TryParse(comboBoxActivationRMB.Text, out key2);
+            clickerMac.settings.rmb.enable = key2;
             clickerMac.SaveCFG();
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox2.Checked)
+            if (checkBoxEnableMacro.Checked)
             {
                 pluginClient.PluginLoad(clickerMac);
             }
@@ -43,15 +45,29 @@ namespace Minecraft_Mac.Forms
 
         private void AutoClicker_Load(object sender, EventArgs e)
         {
-            comboBox3.Items.Clear();
-            comboBox1.Items.Clear();
+            comboBoxActivationRMB.Items.Clear();
+            comboBoxActivationLMB.Items.Clear();
             foreach (string name in Enum.GetNames(typeof(Keys)))
             {
-                comboBox3.Items.Add(name);
-                comboBox1.Items.Add(name);
+                comboBoxActivationRMB.Items.Add(name);
+                comboBoxActivationLMB.Items.Add(name);
             }
             clickerMac = new AutoClickerMac(this);
-            clickerMac.LoadCFG();
+            try
+            {
+                clickerMac.LoadCFG();
+            }
+            catch
+            {
+                clickerMac.SaveCFG();
+            }
+            #region Загрузка значений в форму
+            comboBoxActivationLMB.Text = clickerMac.settings.lmb.enable.ToString();
+            textBoxLMBDelay.Text = clickerMac.settings.lmb.cps.ToString();
+
+            comboBoxActivationRMB.Text = clickerMac.settings.rmb.enable.ToString();
+            textBoxRMBDelay.Text = clickerMac.settings.rmb.cps.ToString();
+            #endregion
         }
 
         static PluginUpdater pluginUpdater = new PluginUpdater();
@@ -60,8 +76,8 @@ namespace Minecraft_Mac.Forms
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Keys key2 = Keys.None;
-            Enum.TryParse(comboBox1.Text, out key2);
-            clickerMac.lmb_key = key2;
+            Enum.TryParse(comboBoxActivationLMB.Text, out key2);
+            clickerMac.settings.lmb.enable = key2;
             clickerMac.SaveCFG();
         }
 
@@ -73,8 +89,8 @@ namespace Minecraft_Mac.Forms
         private void textBox6_TextChanged(object sender, EventArgs e)
         {
             int cps = 12;
-            int.TryParse(textBox6.Text, out cps);
-            clickerMac.rmb_cps = cps;
+            int.TryParse(textBoxRMBDelay.Text, out cps);
+            clickerMac.settings.rmb.cps = cps;
             clickerMac.SaveCFG();
         }
 
@@ -82,6 +98,24 @@ namespace Minecraft_Mac.Forms
         {
             this.Hide();
             e.Cancel = true;
+        }
+
+        private void textBox12_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 8) // цифры и клавиша BackSpace
+            {
+                e.Handled = true;
+            }
         }
     }
 
@@ -92,70 +126,82 @@ namespace Minecraft_Mac.Forms
         {
             this.clicker = clicker;
         }
-        public Keys lmb_key = Keys.None;
-        public Keys rmb_key = Keys.None;
+        public AutoClickerSettings settings = new AutoClickerSettings();
 
-        public int lmb_cps = 12;
-        public int rmb_cps = 12;
+        #region Работа с CFG
         public void LoadCFG()
         {
-            if (File.Exists("Auto Clicker.ini"))
+            if (File.Exists("Settings\\Auto Clicker.json"))
             {
-                INIManager manager = new INIManager(Path.Combine(Application.StartupPath, "Auto Clicker.ini"));
-                try
+                using (StreamReader sr = new StreamReader("Settings\\Auto Clicker.json", encoding: System.Text.Encoding.UTF8))
                 {
-                    lmb_key = (Keys)Enum.Parse(typeof(Keys), manager.GetPrivateString("LMB", "Activation Key"));
-                    clicker.comboBox1.Text = lmb_key.ToString();
+                    string line = sr.ReadToEnd();
+                    settings = JsonConvert.DeserializeObject<AutoClickerSettings>(line);
                 }
-                catch { }
-                try
-                {
-                    lmb_cps = int.Parse(manager.GetPrivateString("LMB", "CPS"));
-                    clicker.textBox12.Text = lmb_cps.ToString();
-                }
-                catch { }
-
-                try
-                {
-                    rmb_key = (Keys)Enum.Parse(typeof(Keys), manager.GetPrivateString("RMB", "Activation Key"));
-                    clicker.comboBox3.Text = rmb_key.ToString();
-                }
-                catch { }
-                try
-                {
-                    rmb_cps = int.Parse(manager.GetPrivateString("RMB", "CPS"));
-                    clicker.textBox6.Text = rmb_cps.ToString();
-                }
-                catch { }
             }
         }
         public void SaveCFG()
         {
-            if (!File.Exists("Auto Clicker.ini"))
+            if (!Directory.Exists("Settings"))
             {
-                File.Create("Auto Clicker.ini").Close();
+                Directory.CreateDirectory("Settings");
+            }
+            if (!File.Exists("Settings\\Auto Clicker.json"))
+            {
+                File.Create("Settings\\Auto Clicker.json").Close();
             }
 
-            INIManager manager = new INIManager(Path.Combine(Application.StartupPath, "Auto Clicker.ini"));
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new JavaScriptDateTimeConverter());
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.Formatting = Formatting.Indented;
 
-            manager.WritePrivateString("LMB", "Activation Key", lmb_key.ToString());
-            manager.WritePrivateString("LMB", "CPS", lmb_cps.ToString());
-
-            manager.WritePrivateString("RMB", "Activation Key", rmb_key.ToString());
-            manager.WritePrivateString("RMB", "CPS", rmb_cps.ToString());
+            using (StreamWriter sw = new StreamWriter("Settings\\Auto Clicker.json"))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, settings);
+            }
         }
+        #endregion
+
         public override void Update()
         {
-            if (IsKeyPressed(lmb_key))
+            if (IsKeyPressed(settings.lmb.enable))
             {
                 LeftClick();
-                Thread.Sleep(1000 / lmb_cps);
+                Thread.Sleep(1000 / settings.lmb.cps);
             }
-            if (IsKeyPressed(rmb_key))
+            if (IsKeyPressed(settings.rmb.enable))
             {
                 RightClick();
-                Thread.Sleep(1000 / rmb_cps);
+                Thread.Sleep(1000 / settings.rmb.cps);
             }
+        }
+    }
+
+    public class AutoClickerSettings
+    {
+        [JsonProperty("LMB")]
+        public LMB lmb = new LMB();
+        [JsonProperty("RMB")]
+        public RMB rmb = new RMB();
+
+
+        public class LMB
+        {
+            [JsonProperty("Keybind")]
+            [JsonConverter(typeof(StringEnumConverter))]
+            public Keys enable = Keys.None;
+            [JsonProperty("CPS")]
+            public int cps = 12;
+        }
+        public class RMB
+        {
+            [JsonProperty("Keybind")]
+            [JsonConverter(typeof(StringEnumConverter))]
+            public Keys enable = Keys.None;
+            [JsonProperty("CPS")]
+            public int cps = 12;
         }
     }
 }
