@@ -24,7 +24,7 @@ namespace Minecraft_Mac.Forms
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             chestStealerPlugin.SetPrepare(checkBox1.Checked);
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
         static PluginUpdater pluginUpdater = new PluginUpdater();
         private PluginClient pluginClient = new PluginClient(pluginUpdater);
@@ -87,7 +87,7 @@ namespace Minecraft_Mac.Forms
             Keys key2 = Keys.None;
             Enum.TryParse(comboBox1.Text, out key2);
             chestStealerPlugin.activ_key_9x3 = key2;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace Minecraft_Mac.Forms
             int slot_switch_delay = 2;
             int.TryParse(textBox1.Text, out slot_switch_delay);
             chestStealerPlugin.slot_switch_delay = slot_switch_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -103,7 +103,7 @@ namespace Minecraft_Mac.Forms
             int slot_aim_delay = 5;
             int.TryParse(textBox2.Text, out slot_aim_delay);
             chestStealerPlugin.slot_aim_delay = slot_aim_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -111,19 +111,23 @@ namespace Minecraft_Mac.Forms
             int clicks = 2;
             int.TryParse(textBox3.Text, out clicks);
             chestStealerPlugin.clicks = clicks;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
-            chestStealerPlugin.offset_x = int.Parse(textBox5.Text);
-            chestStealerPlugin.SaveCFG();
+            int offset_x = 35;
+            int.TryParse(textBox5.Text, out offset_x);
+            chestStealerPlugin.offset_x = offset_x;
+            SaveCFG();
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
-            chestStealerPlugin.offset_y = int.Parse(textBox4.Text);
-            chestStealerPlugin.SaveCFG();
+            int offset_y = 35;
+            int.TryParse(textBox4.Text, out offset_y);
+            chestStealerPlugin.offset_y = offset_y;
+            SaveCFG();
         }
 
         private void textBox6_TextChanged(object sender, EventArgs e)
@@ -131,7 +135,7 @@ namespace Minecraft_Mac.Forms
             int work_done_delay = 500;
             int.TryParse(textBox6.Text, out work_done_delay);
             chestStealerPlugin.work_done_delay = work_done_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -139,7 +143,7 @@ namespace Minecraft_Mac.Forms
             Keys key3 = Keys.None;
             Enum.TryParse(comboBox3.Text, out key3);
             chestStealerPlugin.activ_key_9x6 = key3;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -147,7 +151,7 @@ namespace Minecraft_Mac.Forms
             Keys key = Keys.None;
             Enum.TryParse(comboBox2.Text, out key);
             chestStealerPlugin.prep_key_9x3 = key;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
@@ -155,7 +159,7 @@ namespace Minecraft_Mac.Forms
             Keys key4 = Keys.None;
             Enum.TryParse(comboBox4.Text, out key4);
             chestStealerPlugin.prep_key_9x6 = key4;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox8_TextChanged(object sender, EventArgs e)
@@ -163,7 +167,7 @@ namespace Minecraft_Mac.Forms
             int shift_down_delay = 25;
             int.TryParse(textBox8.Text, out shift_down_delay);
             chestStealerPlugin.shift_down_delay = shift_down_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
@@ -171,7 +175,7 @@ namespace Minecraft_Mac.Forms
             int shift_up_delay = 25;
             int.TryParse(textBox7.Text, out shift_up_delay);
             chestStealerPlugin.shift_up_delay = shift_up_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox10_TextChanged(object sender, EventArgs e)
@@ -179,7 +183,7 @@ namespace Minecraft_Mac.Forms
             int mouse_down_delay = 0;
             int.TryParse(textBox10.Text, out mouse_down_delay);
             chestStealerPlugin.mouse_down_delay = mouse_down_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox9_TextChanged(object sender, EventArgs e)
@@ -187,19 +191,19 @@ namespace Minecraft_Mac.Forms
             int mouse_up_delay = 3;
             int.TryParse(textBox9.Text, out mouse_up_delay);
             chestStealerPlugin.mouse_up_delay = mouse_up_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             chestStealerPlugin.auto_close = checkBox4.Checked;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             chestStealerPlugin.auto_open = checkBox5.Checked;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void textBox12_TextChanged(object sender, EventArgs e)
@@ -207,7 +211,7 @@ namespace Minecraft_Mac.Forms
             int auto_open_delay = 500;
             int.TryParse(textBox12.Text, out auto_open_delay);
             chestStealerPlugin.auto_open_delay = auto_open_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
 
         private void CheatStealer_FormClosing(object sender, FormClosingEventArgs e)
@@ -221,8 +225,18 @@ namespace Minecraft_Mac.Forms
             int click_delay = 2;
             int.TryParse(textBox12.Text, out click_delay);
             chestStealerPlugin.clicks_delay = click_delay;
-            chestStealerPlugin.SaveCFG();
+            SaveCFG();
         }
+
+        #region Дополнительные методы
+        private void SaveCFG()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                chestStealerPlugin.SaveCFG();
+            });
+        }
+        #endregion
     }
     public class ChestStealerPlugin : Plugin
     {
