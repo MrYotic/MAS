@@ -68,15 +68,6 @@ namespace Minecraft_Mac.Forms
         {
             this.delay = delay;
         }
-        public List<string> NeedItems()
-        {
-            List<string> items = new List<string>();
-            items.Add("Itemframe x1");
-            items.Add("Piston x1");
-            items.Add("Stone button x1");
-            items.Add("Colid block x1");
-            return items;
-        }
         public override void Update()
         {
             if (IsKeyPressed(key))

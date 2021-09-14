@@ -18,7 +18,7 @@ namespace Minecraft_Mac.Forms
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            chestStealerPlugin.SetPrepare(checkBox1.Checked);
+            chestStealerPlugin.prepare = checkBox1.Checked;
             SaveCFG();
         }
         static PluginUpdater pluginUpdater = new PluginUpdater();
@@ -241,31 +241,50 @@ namespace Minecraft_Mac.Forms
             this.stealer = stealer;
             LoadCFG();
         }
+        #region Бинды актаваций
         public Keys activ_key_9x3 = Keys.None; /* Клавиша активаций Одиночного сундука */
         public Keys activ_key_9x6 = Keys.None;  /* Клавиша активаций Двойного сундука */
+        #endregion
 
+        #region Бинды настройки начального слота
         public Keys prep_key_9x3 = Keys.None;
         public Keys prep_key_9x6 = Keys.None;
+        #endregion
 
+        #region Настройки мыши
         public int mouse_down_delay = 0;
+        public int mouse_up_delay = 3;
+        public int clicks = 2;
+        #endregion
+
+        #region Настройки шифта
         public int shift_down_delay = 25;
         public int shift_up_delay = 25;
+        #endregion
 
-        public int mouse_up_delay = 3;
+        #region Настройки скорости
         public int slot_switch_delay = 2;
         public int slot_aim_delay = 5;
-        public int work_done_delay = 500;
-        public int clicks = 2;
-        public bool prepare = false;
         public int clicks_delay = 2;
+        public int work_done_delay = 500;
+        #endregion
 
+        #region Настройка включения настройки начального слота
+        public bool prepare = false;
+        #endregion
+
+        #region Автоматизация
         public bool auto_close = false;
         public bool auto_open = false;
-        public int auto_open_delay = 1;
+        public int auto_open_delay = 500;
+        #endregion
 
+        #region Настройка офсета для смещения от начального слота
         public int offset_x = 35;
         public int offset_y = 35;
+        #endregion
 
+        #region Работа с конфигурацией
         public void LoadCFG()
         {
             if (File.Exists("Chest Stealer.ini"))
@@ -425,10 +444,9 @@ namespace Minecraft_Mac.Forms
             manager.WritePrivateString("9x6", "First Slot Y", first_slot_1_9x6.Y.ToString());
 
         }
-        public void SetPrepare(bool prepare)
-        {
-            this.prepare = prepare;
-        }
+        #endregion
+
+        #region Логика макроса
         private void CollectSlot(Point location)
         {
             Cursor.Position = location;
@@ -511,6 +529,9 @@ namespace Minecraft_Mac.Forms
             }
             Thread.Sleep(work_done_delay);
         }
+        #endregion
+
+        #region Проверка нажатия клавиш
         public override void Update()
         {
             if (IsKeyPressed(prep_key_9x3) && prepare)
@@ -534,5 +555,6 @@ namespace Minecraft_Mac.Forms
                 CollectChest(true, activ_key_9x6);
             }
         }
+        #endregion
     }
 }
