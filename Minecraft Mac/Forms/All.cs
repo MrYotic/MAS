@@ -36,5 +36,10 @@ namespace Minecraft_Mac.Forms
                 }
             }
         }
+
+        private void All_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

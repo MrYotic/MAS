@@ -78,6 +78,7 @@ namespace Minecraft_Mac.Forms
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "All";
             this.Text = "All";
+            this.Load += new System.EventHandler(this.All_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

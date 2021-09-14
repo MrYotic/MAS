@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Converters;
 using PluginsAPI;
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;

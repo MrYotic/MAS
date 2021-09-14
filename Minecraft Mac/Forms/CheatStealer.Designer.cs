@@ -643,7 +643,7 @@ namespace Minecraft_Mac.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(565, 347);
+            this.ClientSize = new System.Drawing.Size(499, 347);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -652,9 +652,11 @@ namespace Minecraft_Mac.Forms
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "CheatStealer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CheatStealer";
+            this.Text = "Chest Stealer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CheatStealer_FormClosing);
             this.Load += new System.EventHandler(this.CheatStealer_Load);
             this.groupBox1.ResumeLayout(false);

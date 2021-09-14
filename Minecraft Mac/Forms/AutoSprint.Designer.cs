@@ -96,6 +96,8 @@ namespace Minecraft_Mac.Forms
             this.ClientSize = new System.Drawing.Size(260, 67);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AutoSprint";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AutoSprint";
